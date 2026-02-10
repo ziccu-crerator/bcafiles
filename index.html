@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCA file - Leaks</title>
+    <style>
+        /* CHANGE YOUR CUSTOM LOGO: Replace the background-image URL below */
+        :root {
+            --primary-color: #c2185b;
+            --hover-color: #f5f5f5;
+            --border-color: #e0e0e0;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --blue-accent: #1a73e8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        /* Loading Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-out 1.5s forwards;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Main Container - Slide In Animation */
+        .container {
+            opacity: 0;
+            animation: slideInFade 0.6s ease-out 1.8s forwards;
+        }
+
+        @keyframes slideInFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: white;
+            height: 64px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .menu-icon:hover {
+            background-color: var(--hover-color);
+        }
+
+        /* CHANGE YOUR LOGO HERE: Update the src attribute */
+        .logo {
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            color: var(--text-primary);
+            font-weight: 400;
+            letter-spacing: -0.5px;
+        }
+
+        .search-section {
+            flex: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f1f3f4;
+            border-radius: 8px;
+            padding: 0 16px;
+            height: 48px;
+            transition: all 0.2s;
+        }
+
+        .search-bar:hover {
+            background-color: #e8eaed;
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+        }
+
+        .search-bar.focused {
+            background-color: white;
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+        }
+
+        .search-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            color: var(--text-secondary);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+            color: var(--text-primary);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        /* CHANGE PROFILE PICTURE: Update the src in the HTML */
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 64px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 256px;
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            background-color: white;
+        }
+
+        .compose-btn {
+            margin: 16px;
+            padding: 12px 24px;
+            background-color: #c2e7ff;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3);
+        }
+
+        .compose-btn:hover {
+            box-shadow: 0 1px 3px 0 rgba(60,64,67,0.4);
+            background-color: #b8dff5;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            height: 40px;
+            cursor: pointer;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-right: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .nav-item.active {
+            background-color: #d3e3fd;
+        }
+
+        .nav-item-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 16px;
+        }
+
+        .nav-item-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .nav-item-count {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .section-title {
+            padding: 12px 24px 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .person-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 24px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .person-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .person-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 16px;
+            color: var(--text-secondary);
+        }
+
+        .person-name {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 8px;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: background-color 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        /* AI Overview */
+        .ai-overview {
+            padding: 16px 24px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 8px;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .ai-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .ai-link {
+            color: var(--blue-accent);
+            text-decoration: none;
+        }
+
+        /* Email List */
+        .email-list {
+            flex: 1;
+            overflow-y: auto;
+            animation: slideInFromRight 0.5s ease-out 2s backwards;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .email-item {
+            display: grid;
+            grid-template-columns: 40px 40px 1fr 180px;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+        }
+
+        .email-item:hover {
+            box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            z-index: 1;
+        }
+
+        .email-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .email-star {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .email-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            overflow: hidden;
+        }
+
+        .email-sender {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-primary);
+            min-width: 180px;
+        }
+
+        .email-subject {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .email-snippet {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-left: 8px;
+        }
+
+        .email-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        .email-label {
+            background-color: #e8f0fe;
+            color: #1967d2;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 0;
+            gap: 24px;
+            z-index: 100;
+            animation: slideUp 0.5s ease-out 2.2s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-icon-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        /* CHANGE BOTTOM ICONS: Replace these background-image URLs */
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .nav-icon.gmail {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23EA4335"><path d="M20 18h-2V9.25L12 13 6 9.25V18H4V6h1.2l6.8 4.25L18.8 6H20v12z"/></svg>');
+        }
+
+        .nav-icon.chat {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2334A853"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L2 22l5.71-.97C9 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.38 0-2.68-.31-3.85-.85l-.28-.13-2.91.49.49-2.91-.13-.28C4.31 14.68 4 13.38 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>');
+        }
+
+        .nav-icon.spaces {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>');
+        }
+
+        .nav-icon.meet {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300897B"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>');
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #dadce0;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #bdc1c6;
+        }
+
+        /* Search Results */
+        .search-results {
+            position: absolute;
+            top: 64px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 720px;
+            max-height: 400px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-result-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .search-result-sender {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .search-result-subject {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen Animation -->
+    <div class="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo-section">
+                <div class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </div>
+                <!-- CHANGE YOUR LOGO: Replace this img src with your logo file -->
+                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 40'><text x='10' y='30' font-family='Arial' font-size='28' font-weight='bold' fill='%23c2185b'>Jmail</text></svg>" alt="Jmail Logo" class="logo">
+            </div>
+
+            <div class="search-section">
+                <div class="search-bar" id="searchBar">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Search mail" id="searchInput">
+                </div>
+            </div>
+
+            <div class="header-icons">
+                <div class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </div>
+                <div class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"/>
+                    </svg>
+                </div>
+                <div class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"/>
+                        <circle cx="12" cy="12" r="3.5"/>
+                    </svg>
+                </div>
+                <div class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </div>
+                <!-- CHANGE PROFILE PICTURE: Replace this src with your image -->
+                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23c2185b'/><text x='50' y='65' text-anchor='middle' font-size='40' fill='white' font-family='Arial'>J</text></svg>" alt="Profile" class="profile-pic">
+            </div>
+        </header>
+
+        <!-- Search Results (Hidden by default) -->
+        <div class="search-results" id="searchResults"></div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="compose-btn" onclick="alert('Compose feature - Create your compose page!')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                    </svg>
+                    Compose
+                </button>
+
+                <div class="nav-item active">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <span class="nav-item-text">Inbox</span>
+                    <span class="nav-item-count">7499</span>
+                </div>
+
+                <div class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                    <span class="nav-item-text">Starred</span>
+                    <span class="nav-item-count">9914</span>
+                </div>
+
+                <div class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                    <span class="nav-item-text">Sent</span>
+                    <span class="nav-item-count">4340</span>
+                </div>
+
+                <div class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
+                    </svg>
+                    <span class="nav-item-text">Attachments</span>
+                </div>
+
+                <div class="section-title">PERSONS</div>
+
+                <div class="person-item" onclick="navigateToPerson('jeffrey-epstein')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Jeffrey Epstein</span>
+                </div>
+
+                <div class="person-item" onclick="navigateToPerson('ghislaine-maxwell')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Ghislaine Maxwell</span>
+                </div>
+
+                <div class="person-item" onclick="navigateToPerson('bill-clinton')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Bill Clinton</span>
+                </div>
+
+                <div class="person-item" onclick="navigateToPerson('prince-andrew')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Prince Andrew</span>
+                </div>
+
+                <div class="person-item" onclick="navigateToPerson('alan-dershowitz')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Alan Dershowitz</span>
+                </div>
+
+                <div class="person-item" onclick="navigateToPerson('jean-luc-brunel')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Jean-Luc Brunel</span>
+                </div>
+
+                <div class="person-item" onclick="navigateToPerson('leslie-wexner')">
+                    <svg class="person-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="person-name">Leslie Wexner</span>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <!-- AI Overview -->
+                <div class="ai-overview">
+                    <div class="ai-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        AI Overview
+                    </div>
+                    <div class="ai-content">
+                        You are logged in as Jeffrey Epstein, jeevacation@gmail.com. These are real emails released by Congress. Explore by name, contribute to the starred list, search, or <a href="#" class="ai-link">visit a random page</a>.
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <input type="checkbox" class="email-checkbox">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="cursor: pointer;">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                    <button class="toolbar-btn">↻</button>
+                    <button class="toolbar-btn">Random Page</button>
+                    <button class="toolbar-btn" style="margin-left: auto;">⚙️ All accounts</button>
+                    <button class="toolbar-btn">Old releases</button>
+                    <span style="margin-left: auto; font-size: 12px; color: var(--text-secondary);">1–100 of 7499</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="cursor: pointer;">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="cursor: pointer;">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+
+                <!-- Email List -->
+                <div class="email-list">
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">PV Nidhin</span>
+                            <span class="email-label">Yahoo</span>
+                            <span class="email-subject">You are dead</span>
+                            <span class="email-snippet"> - Lol good riddance</span>
+                        </div>
+                        <div class="email-date">Aug 13, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Shanil(chendi)</span>
+                            <span class="email-label">Email </span>
+                            <span class="email-subject">My dearest Princi, when u free mahn. I was so sad...</span>
+                            <span class="email-snippet"> - My dearest Princi, when u free mahn. I was so sad...</span>
+                        </div>
+                        <div class="email-date">Jul 25, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Flipboard 10 for Today</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">11 questions for Mueller</span>
+                            <span class="email-snippet"> - Flipboard Interesting stories worth your time. — The Seltzer Bubble</span>
+                        </div>
+                        <div class="email-date">Jul 13, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Flipboard Week in Review</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Alex Acosta resigns, Jeffrey Epstein arrested and Trump ends bid for citizenship question</span>
+                            <span class="email-snippet"> - Flipboard Week in Review This week's top stories</span>
+                        </div>
+                        <div class="email-date">Jul 13, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Anonymous Sender</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">[Redacted]</span>
+                            <span class="email-snippet"> - Dear Jeff, I read the news papers today, I can't believe they arrested you...</span>
+                        </div>
+                        <div class="email-date">Jul 10, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Intelligence Squared</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Letter of Today, in conversation with Justin Webb</span>
+                            <span class="email-snippet"> - View in browser Join us at London's RSA for a fascinating evening...</span>
+                        </div>
+                        <div class="email-date">Jul 9, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Ghislaine Maxwell</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Next week's schedule</span>
+                            <span class="email-snippet"> - Jeffrey, We need to discuss the upcoming arrangements. The island...</span>
+                        </div>
+                        <div class="email-date">Jul 2, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Legal Team</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Urgent: Court documents</span>
+                            <span class="email-snippet"> - Mr. Epstein, Please review the attached documents before tomorrow's hearing...</span>
+                        </div>
+                        <div class="email-date">Jun 28, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Private Banking</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Account statement - June 2019</span>
+                            <span class="email-snippet"> - Dear Mr. Epstein, Please find your monthly statement attached...</span>
+                        </div>
+                        <div class="email-date">Jun 25, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Flight Services</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Flight confirmation - NYC to PBI</span>
+                            <span class="email-snippet"> - Your flight has been confirmed for June 30th. Departure 3:00 PM...</span>
+                        </div>
+                        <div class="email-date">Jun 20, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Leslie Wexner</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Re: Foundation matters</span>
+                            <span class="email-snippet"> - Jeffrey, Regarding our discussion about the trust arrangements...</span>
+                        </div>
+                        <div class="email-date">Jun 15, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Property Management</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Little St. James maintenance update</span>
+                            <span class="email-snippet"> - Mr. Epstein, The renovations are proceeding as scheduled...</span>
+                        </div>
+                        <div class="email-date">Jun 10, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Science Research Institute</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Thank you for your donation</span>
+                            <span class="email-snippet"> - Dear Dr. Epstein, We are grateful for your continued support...</span>
+                        </div>
+                        <div class="email-date">Jun 5, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Art Gallery NYC</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">Private viewing invitation</span>
+                            <span class="email-snippet"> - Mr. Epstein, You're invited to an exclusive preview of our new collection...</span>
+                        </div>
+                        <div class="email-date">May 28, 2019</div>
+                    </div>
+
+                    <div class="email-item">
+                        <input type="checkbox" class="email-checkbox">
+                        <svg class="email-star" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                        </svg>
+                        <div class="email-content">
+                            <span class="email-sender">Personal Assistant</span>
+                            <span class="email-label"></span>
+                            <span class="email-subject">This week's calendar</span>
+                            <span class="email-snippet"> - Jeffrey, Here's your schedule for the upcoming week. Monday 9AM...</span>
+                        </div>
+                        <div class="email-date">May 20, 2019</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="gmail.html" class="nav-icon-item">
+                <div class="nav-icon gmail"></div>
+                <span class="nav-label">Mail</span>
+            </a>
+            <a href="chat.html" class="nav-icon-item">
+                <div class="nav-icon chat"></div>
+                <span class="nav-label">Chat</span>
+            </a>
+            <a href="spaces.html" class="nav-icon-item">
+                <div class="nav-icon spaces"></div>
+                <span class="nav-label">Spaces</span>
+            </a>
+            <a href="meet.html" class="nav-icon-item">
+                <div class="nav-icon meet"></div>
+                <span class="nav-label">Meet</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // Email data for search functionality
+        const emails = [
+            { sender: "Cody Rudland", subject: "You are dead", snippet: "Lol good riddance", date: "Aug 13, 2019" },
+            { sender: "Cecilia Steen", subject: "With love", snippet: "My dearest Jeffrey, I don't know when you'll get to read this", date: "Jul 25, 2019" },
+            { sender: "Flipboard 10 for Today", subject: "11 questions for Mueller", snippet: "Flipboard Interesting stories", date: "Jul 13, 2019" },
+            { sender: "Flipboard Week in Review", subject: "Alex Acosta resigns, Jeffrey Epstein arrested", snippet: "This week's top stories", date: "Jul 13, 2019" },
+            { sender: "Anonymous Sender", subject: "[Redacted]", snippet: "Dear Jeff, I read the news papers today", date: "Jul 10, 2019" },
+            { sender: "Intelligence Squared", subject: "Letter of Today", snippet: "View in browser Join us", date: "Jul 9, 2019" },
+            { sender: "Ghislaine Maxwell", subject: "Next week's schedule", snippet: "We need to discuss arrangements", date: "Jul 2, 2019" },
+            { sender: "Legal Team", subject: "Urgent: Court documents", snippet: "Please review the attached", date: "Jun 28, 2019" },
+            { sender: "Private Banking", subject: "Account statement", snippet: "Please find your monthly statement", date: "Jun 25, 2019" },
+            { sender: "Flight Services", subject: "Flight confirmation", snippet: "Your flight has been confirmed", date: "Jun 20, 2019" },
+            { sender: "Leslie Wexner", subject: "Re: Foundation matters", snippet: "Regarding our discussion", date: "Jun 15, 2019" },
+            { sender: "Property Management", subject: "Little St. James maintenance", snippet: "Renovations proceeding as scheduled", date: "Jun 10, 2019" },
+            { sender: "Science Research Institute", subject: "Thank you for donation", snippet: "We are grateful for your support", date: "Jun 5, 2019" },
+            { sender: "Art Gallery NYC", subject: "Private viewing invitation", snippet: "Exclusive preview invitation", date: "May 28, 2019" },
+            { sender: "Personal Assistant", subject: "This week's calendar", snippet: "Here's your schedule", date: "May 20, 2019" }
+        ];
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchBar = document.getElementById('searchBar');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('focus', () => {
+            searchBar.classList.add('focused');
+        });
+
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchBar.classList.remove('focused');
+                searchResults.classList.remove('active');
+            }, 200);
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query.length === 0) {
+                searchResults.classList.remove('active');
+                return;
+            }
+
+            const filtered = emails.filter(email => 
+                email.sender.toLowerCase().includes(query) ||
+                email.subject.toLowerCase().includes(query) ||
+                email.snippet.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                searchResults.innerHTML = filtered.map(email => `
+                    <div class="search-result-item" onclick="alert('Email from ${email.sender}: ${email.subject}')">
+                        <div class="search-result-sender">${email.sender}</div>
+                        <div class="search-result-subject">${email.subject} - ${email.snippet}</div>
+                    </div>
+                `).join('');
+                searchResults.classList.add('active');
+            } else {
+                searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+                searchResults.classList.add('active');
+            }
+        });
+
+        // Person navigation
+        function navigateToPerson(personId) {
+            // Create a new HTML page for each person
+            const personName = personId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            alert(`Navigating to ${personName}'s page...\n\nTo complete: Create ${personId}.html with emails specific to this person.`);
+            // In a real implementation, this would navigate to: window.location.href = personId + '.html';
+        }
+
+        // Prevent default form submission
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add click handlers to email items for demo
+            document.querySelectorAll('.email-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('email-checkbox') && 
+                        !e.target.classList.contains('email-star')) {
+                        const sender = item.querySelector('.email-sender').textContent;
+                        const subject = item.querySelector('.email-subject').textContent;
+                        alert(`Opening email from ${sender}: ${subject}\n\nCreate a detailed email view page to show full content!`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
