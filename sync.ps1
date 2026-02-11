@@ -11,8 +11,15 @@ function Get-MediaData($dir, $extensions) {
     
     foreach ($file in $files) {
         $name = $file.BaseName
-        # Better title cleaning: remove "WhatsApp Image/Video" and date/time patterns
-        $title = $name -replace "^WhatsApp (Image|Video) [\d-]* at ", "" -replace "[\d.]* [AP]M$", "" -replace "-", " " -replace "_", " "
+        # Even better title cleaning: extract date and make it pretty
+        if ($name -match "(\d{4}-\d{2}-\d{2}) at (\d{1,2}\.\d{2}\.\d{2} [AP]M)") {
+            $datePart = $matches[1]
+            $timePart = $matches[2] -replace "\.", ":"
+            $title = [DateTime]::ParseExact($datePart, "yyyy-MM-dd", $null).ToString("MMM d, yyyy") + " - " + $timePart
+        } else {
+            $title = $name -replace "^WhatsApp (Image|Video) ", "" -replace " at ", " " -replace "-", " " -replace "_", " "
+        }
+        $title = $title.Trim()
         if ($title -eq "") { $title = "Media $i" }
         $date = $file.LastWriteTime.ToString("MMM d, yyyy")
         $url = "$dir/$($file.Name)"
@@ -27,18 +34,21 @@ function Get-MediaData($dir, $extensions) {
         if ($dir -eq "vid") {
             $item["duration"] = "0:00"
             $item["tags"] = ""
-            $item["thumbnail"] = "img/" + ($name -replace "Video", "Image") + ".jpg" # Guessing thumbnail path
+            $item["thumbnail"] = "" # No longer needed, UI uses video itself
         }
         
         $data += $item
         $i++
     }
-    
     return $data | ConvertTo-Json -Depth 10
 }
 
 $photoDataJson = Get-MediaData $imgDir @(".jpg", ".jpeg", ".png", ".webp", ".gif")
 $videoDataJson = Get-MediaData $vidDir @(".mp4", ".webm", ".ogg", ".mov")
+
+# Fix encoding issues (like \u0026 for &)
+$photoDataJson = $photoDataJson -replace "\\u0026", "&"
+$videoDataJson = $videoDataJson -replace "\\u0026", "&"
 
 $content = @"
 // ============================================================
@@ -52,3 +62,6 @@ const videosData = $videoDataJson;
 
 Set-Content -Path $dataFile -Value $content
 Write-Host "Successfully synced media data to $dataFile!" -ForegroundColor Green
+
+
+# powershell -ExecutionPolicy Bypass -File sync.ps1

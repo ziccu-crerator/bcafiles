@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMail - Videos</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>BMail - Media Library</title>
     <style>
         :root {
             --primary-color: #c2185b;
@@ -172,13 +173,26 @@
             background-color: #000;
         }
 
-        .thumbnail-img {
+        .thumbnail-img,
+        .thumbnail-preview {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            background-color: #000;
+            display: block;
+        }
+
+        .thumbnail-img {
+            z-index: 1;
+        }
+
+        .thumbnail-preview {
+            z-index: 2;
+            opacity: 1;
+            /* Always show the video preview */
         }
 
         .duration-badge {
@@ -253,47 +267,73 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.98);
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            padding: 40px;
         }
 
         .modal.active {
             display: flex;
-            animation: fadeIn 0.3s forwards;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .player-container {
-            width: 80%;
-            /* Responsive width */
-            max-width: 1000px;
-            aspect-ratio: 16/9;
+            width: fit-content;
+            max-width: min(100%, 1100px);
+            max-height: 85vh;
+            /* Prevent it from being taller than the screen */
             background: black;
             position: relative;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            /* Help with centering */
+            align-self: center;
         }
 
         #player-wrapper {
             width: 100%;
             height: 100%;
             background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Ensure Plyr fills the container correctly */
+        .plyr {
+            width: 100%;
+            height: 100%;
         }
 
         .close-btn {
             position: absolute;
-            top: -50px;
-            right: 0;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
+            border-radius: 50%;
             border: none;
-            min-width: 44px;
-            min-height: 44px;
+            cursor: pointer;
+            z-index: 2100;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            transition: background 0.2s;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         body.modal-open {
@@ -473,15 +513,16 @@
             }
 
             .player-container {
-                width: 95%;
+                width: 100%;
+                border-radius: 0;
             }
 
             .close-btn {
-                top: 8px;
-                right: 8px;
-                background: rgba(0, 0, 0, 0.5);
-                border-radius: 50%;
-                z-index: 10;
+                top: 10px;
+                right: 10px;
+                width: 36px;
+                height: 36px;
+                font-size: 20px;
             }
         }
 
@@ -584,8 +625,8 @@
 
     <!-- Video Player Modal -->
     <div class="modal" id="videoModal">
+        <button class="close-btn" onclick="closeModal()" aria-label="Close video player">&times;</button>
         <div class="player-container">
-            <button class="close-btn" onclick="closeModal()" aria-label="Close video player">&times;</button>
             <div id="player-wrapper">
                 <video id="player" playsinline controls data-poster="">
                     <source src="" type="video/mp4" />
@@ -633,8 +674,9 @@
                 item.className = 'video-card';
                 item.innerHTML = `
                     <div class="thumbnail-container">
-                        <img src="${video.thumbnail}" alt="${video.title}" class="thumbnail-img" loading="lazy" 
-                             onerror="this.src='https://images.unsplash.com/photo-1485017225134-8c83e1088737?w=400&q=80'">
+                        <video class="thumbnail-preview" muted playsinline preload="metadata">
+                            <source src="${video.url}#t=0.5" type="video/mp4">
+                        </video>
                         <div class="duration-badge">${video.duration}</div>
                         <div class="play-icon-overlay">
                             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -647,6 +689,15 @@
                         </div>
                     </div>
                 `;
+
+                const preview = item.querySelector('.thumbnail-preview');
+                item.onmouseenter = () => {
+                    preview.play().catch(() => { });
+                };
+                item.onmouseleave = () => {
+                    preview.pause();
+                };
+
                 item.onclick = () => openModal(video);
                 grid.appendChild(item);
             });
