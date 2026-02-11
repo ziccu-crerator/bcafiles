@@ -26,10 +26,16 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
             background-color: #fff;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Loading Animation */
@@ -73,10 +79,15 @@
             }
         }
 
-        /* Main Container - Slide In Animation */
+        /* Main Container - Scrollable Area */
         .container {
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             opacity: 0;
             animation: slideInFade 0.6s ease-out 1.8s forwards;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes slideInFade {
@@ -492,23 +503,23 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
-            display: none;
-            /* Hide by default */
+            display: flex;
             justify-content: center;
             align-items: center;
             padding: 8px 0;
             padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
             gap: clamp(16px, 5vw, 32px);
-            z-index: 100;
-            animation: slideUp 0.5s ease-out 2.2s backwards;
+            z-index: 9999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
             .bottom-nav {
-                display: flex;
-                /* Show only on mobile */
+                padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
             }
         }
 
@@ -1122,6 +1133,12 @@
                 width: 28px;
                 height: 28px;
             }
+
+            /* Container mobile adjustments */
+            .container {
+                display: flex;
+                flex-direction: column;
+            }
         }
 
         /* Small mobile - header adjustments */
@@ -1293,6 +1310,37 @@
 </head>
 
 <body>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-icon-item active">
+            <div class="nav-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#c2185b">
+                    <path
+                        d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+            </div>
+            <span class="nav-label" style="color: #c2185b; font-weight: 500;">Mail</span>
+        </a>
+        <a href="bphotos.html" class="nav-icon-item">
+            <div class="nav-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368">
+                    <path
+                        d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                </svg>
+            </div>
+            <span class="nav-label">bPhotos</span>
+        </a>
+        <a href="bvideos.html" class="nav-icon-item">
+            <div class="nav-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368">
+                    <path
+                        d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+                </svg>
+            </div>
+            <span class="nav-label">bVideos</span>
+        </a>
+    </nav>
+
     <!-- Loading Screen Animation -->
     <div class="loading-screen">
         <div class="loading-spinner"></div>
@@ -1742,37 +1790,6 @@
                 </div>
             </main>
         </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-icon-item active">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#c2185b">
-                        <path
-                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                    </svg>
-                </div>
-                <span class="nav-label" style="color: #c2185b; font-weight: 500;">Mail</span>
-            </a>
-            <a href="bphotos.html" class="nav-icon-item">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368">
-                        <path
-                            d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                    </svg>
-                </div>
-                <span class="nav-label">bPhotos</span>
-            </a>
-            <a href="bvideos.html" class="nav-icon-item">
-                <div class="nav-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368">
-                        <path
-                            d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
-                    </svg>
-                </div>
-                <span class="nav-label">bVideos</span>
-            </a>
-        </nav>
 
         <!-- Sidebar Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>

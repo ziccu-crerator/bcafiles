@@ -21,14 +21,16 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
             background-color: #fff;
-            height: 100vh;
-            height: 100dvh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         /* Header (Same as index.html) */
@@ -116,10 +118,11 @@
             margin-left: 8px;
         }
 
-        /* Main Content */
+        /* Main Content - Scrollable Area */
         .main-content {
             flex: 1;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             padding: 24px;
             background-color: #fff;
         }
@@ -312,24 +315,18 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
-            display: none;
-            /* Hide by default */
+            display: flex;
             justify-content: center;
             align-items: center;
             padding: 8px 0;
             padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
             gap: clamp(16px, 5vw, 40px);
-            z-index: 100;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        @media (max-width: 768px) {
-            .bottom-nav {
-                display: flex;
-                /* Only on mobile */
-            }
+            z-index: 9999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .nav-icon-item {
@@ -397,9 +394,8 @@
         /* Mobile responsive */
         @media (max-width: 768px) {
             body {
-                overflow: auto;
-                overflow-x: hidden;
-                height: auto;
+                overflow: hidden;
+                height: 100%;
             }
 
             header {
@@ -412,8 +408,7 @@
 
             .main-content {
                 padding: 12px;
-                overflow-y: visible;
-                padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+                padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
             }
 
             .search-section {
@@ -543,18 +538,6 @@
         <div class="bottom-spacer" style="height: 80px; display: none;"></div>
     </main>
 
-    <!-- Lightbox Modal -->
-    <div class="modal" id="photoModal">
-        <div class="modal-controls">
-            <button class="close-btn" onclick="closeModal()" aria-label="Close photo viewer">&times;</button>
-        </div>
-        <img src="" alt="" class="modal-content" id="modalImage">
-        <div class="modal-footer">
-            <div class="modal-title" id="modalTitle">Photo Title</div>
-            <div class="modal-date" id="modalDate">Date</div>
-        </div>
-    </div>
-
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-icon-item">
@@ -568,12 +551,12 @@
         </a>
         <a href="bphotos.html" class="nav-icon-item active">
             <div class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#c2185b">
                     <path
                         d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
                 </svg>
             </div>
-            <span class="nav-label">bPhotos</span>
+            <span class="nav-label" style="color: #c2185b; font-weight: 500;">bPhotos</span>
         </a>
         <a href="bvideos.html" class="nav-icon-item">
             <div class="nav-icon">
@@ -585,6 +568,18 @@
             <span class="nav-label">bVideos</span>
         </a>
     </nav>
+
+    <!-- Lightbox Modal -->
+    <div class="modal" id="photoModal">
+        <div class="modal-controls">
+            <button class="close-btn" onclick="closeModal()" aria-label="Close photo viewer">&times;</button>
+        </div>
+        <img src="" alt="" class="modal-content" id="modalImage">
+        <div class="modal-footer">
+            <div class="modal-title" id="modalTitle">Photo Title</div>
+            <div class="modal-date" id="modalDate">Date</div>
+        </div>
+    </div>
 
     <!-- Load Data -->
     <script src="data.js"></script>
@@ -662,3 +657,4 @@
 </body>
 
 </html>
+```

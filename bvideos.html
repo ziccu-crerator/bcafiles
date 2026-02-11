@@ -21,14 +21,16 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
             background-color: #fff;
-            height: 100vh;
-            height: 100dvh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         /* Header (Same as index.html) */
@@ -116,10 +118,11 @@
             margin-left: 8px;
         }
 
-        /* Main Content */
+        /* Main Content - Scrollable Area */
         .main-content {
             flex: 1;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             padding: 24px;
             background-color: #fff;
         }
@@ -271,10 +274,10 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .player-frame {
+        #player-wrapper {
             width: 100%;
             height: 100%;
-            border: none;
+            background: #000;
         }
 
         .close-btn {
@@ -303,24 +306,18 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
-            display: none;
-            /* Hide by default */
+            display: flex;
             justify-content: center;
             align-items: center;
             padding: 8px 0;
             padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
             gap: clamp(16px, 5vw, 40px);
-            z-index: 100;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        @media (max-width: 768px) {
-            .bottom-nav {
-                display: flex;
-                /* Only on mobile */
-            }
+            z-index: 9999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .nav-icon-item {
@@ -388,9 +385,8 @@
         /* Mobile responsive */
         @media (max-width: 768px) {
             body {
-                overflow: auto;
-                overflow-x: hidden;
-                height: auto;
+                overflow: hidden;
+                height: 100%;
             }
 
             header {
@@ -403,8 +399,7 @@
 
             .main-content {
                 padding: 12px;
-                overflow-y: visible;
-                padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+                padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
             }
 
             .search-section {
@@ -493,10 +488,17 @@
         /* Content padding for bottom nav on mobile */
         @media (max-width: 768px) {
             .main-content {
-                padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+                padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
             }
         }
+
+        /* Plyr.io Custom Theme */
+        :root {
+            --plyr-color-main: var(--primary-color);
+        }
     </style>
+    <!-- Plyr.io CSS -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 </head>
 
 <body>
@@ -535,7 +537,6 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="toolbar">
             <h1 class="page-title">Videos</h1>
@@ -547,22 +548,8 @@
         </div>
 
         <!-- Pad for the bottom nav so it doesn't cover content -->
-        <div style="height: 80px;"></div>
+        <div style="height: 120px;"></div>
     </main>
-
-    <!-- Video Player Modal -->
-    <div class="modal" id="videoModal">
-        <div class="player-container">
-            <button class="close-btn" onclick="closeModal()" aria-label="Close video player">&times;</button>
-            <iframe class="player-frame" id="videoFrame" src="" allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-            <div style="color: white; padding: 10px; text-align: center; font-size: 13px; opacity: 0.8;">
-                Note: If you see "Video unavailable" or Error 150/153, it's because YouTube blocks playing on local
-                files. <br>
-                It will work perfectly once you push to GitHub!
-            </div>
-        </div>
-    </div>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
@@ -586,14 +573,29 @@
         </a>
         <a href="bvideos.html" class="nav-icon-item active">
             <div class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#c2185b">
                     <path
                         d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
                 </svg>
             </div>
-            <span class="nav-label">bVideos</span>
+            <span class="nav-label" style="color: #c2185b; font-weight: 500;">bVideos</span>
         </a>
     </nav>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="videoModal">
+        <div class="player-container">
+            <button class="close-btn" onclick="closeModal()" aria-label="Close video player">&times;</button>
+            <div id="player-wrapper">
+                <video id="player" playsinline controls data-poster="">
+                    <source src="" type="video/mp4" />
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plyr.io JS -->
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
     <!-- Load Data -->
     <script src="data.js"></script>
@@ -602,8 +604,16 @@
     <script>
         const grid = document.getElementById('videoGrid');
         const modal = document.getElementById('videoModal');
-        const videoFrame = document.getElementById('videoFrame');
+        const playerElement = document.getElementById('player');
         const searchInput = document.getElementById('videoSearch');
+
+        // Initialize Plyr
+        const player = new Plyr('#player', {
+            controls: [
+                'play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'
+            ],
+            hideControls: true
+        });
 
         // Render Videos
         function renderVideos(filter = "") {
@@ -643,16 +653,26 @@
 
         // Open Modal
         function openModal(video) {
-            videoFrame.src = video.url;
+            player.source = {
+                type: 'video',
+                title: video.title,
+                sources: [{
+                    src: video.url,
+                    type: 'video/mp4',
+                }],
+                poster: video.thumbnail,
+            };
+
             modal.classList.add('active');
             document.body.classList.add('modal-open');
+            player.play();
         }
 
         // Close Modal
         function closeModal() {
+            player.pause();
             modal.classList.remove('active');
             document.body.classList.remove('modal-open');
-            videoFrame.src = ""; // Stop video playback
         }
 
         // Close on clicking outside player
