@@ -633,7 +633,8 @@
                 item.className = 'video-card';
                 item.innerHTML = `
                     <div class="thumbnail-container">
-                        <img src="${video.thumbnail}" alt="${video.title}" class="thumbnail-img" loading="lazy">
+                        <img src="${video.thumbnail}" alt="${video.title}" class="thumbnail-img" loading="lazy" 
+                             onerror="this.src='https://images.unsplash.com/photo-1485017225134-8c83e1088737?w=400&q=80'">
                         <div class="duration-badge">${video.duration}</div>
                         <div class="play-icon-overlay">
                             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
