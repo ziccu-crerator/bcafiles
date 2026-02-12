@@ -12,15 +12,7 @@ function Get-MediaData($dir, $extensions) {
     foreach ($file in $files) {
         $name = $file.BaseName
         # Even better title cleaning: extract date and make it pretty
-        if ($name -match "(\d{4}-\d{2}-\d{2}) at (\d{1,2}\.\d{2}\.\d{2} [AP]M)") {
-            $datePart = $matches[1]
-            $timePart = $matches[2] -replace "\.", ":"
-            $title = [DateTime]::ParseExact($datePart, "yyyy-MM-dd", $null).ToString("MMM d, yyyy") + " - " + $timePart
-        } else {
-            $title = $name -replace "^WhatsApp (Image|Video) ", "" -replace " at ", " " -replace "-", " " -replace "_", " "
-        }
-        $title = $title.Trim()
-        if ($title -eq "") { $title = "Media $i" }
+        $title = "$i"
         $date = $file.LastWriteTime.ToString("MMM d, yyyy")
         $url = "$dir/$($file.Name)"
         
