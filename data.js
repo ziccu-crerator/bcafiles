@@ -50,6 +50,162 @@ const photosData = [
         "title":  "Feb 11, 2026 - 5:28:26 PM",
         "url":  "img/WhatsApp Image 2026-02-11 at 5.28.26 PM.jpeg",
         "id":  8
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:45:59 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.45.59 AM (1).jpeg",
+        "id":  9
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:45:59 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.45.59 AM.jpeg",
+        "id":  10
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:46:00 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.46.00 AM (1).jpeg",
+        "id":  11
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:46:00 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.46.00 AM.jpeg",
+        "id":  12
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:46:01 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.46.01 AM (1).jpeg",
+        "id":  13
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:46:01 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.46.01 AM.jpeg",
+        "id":  14
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:46:02 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.46.02 AM.jpeg",
+        "id":  15
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:18 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.18 AM.jpeg",
+        "id":  16
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:19 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.19 AM (1).jpeg",
+        "id":  17
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:19 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.19 AM (2).jpeg",
+        "id":  18
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:19 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.19 AM.jpeg",
+        "id":  19
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:20 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.20 AM (1).jpeg",
+        "id":  20
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:20 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.20 AM (2).jpeg",
+        "id":  21
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:20 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.20 AM.jpeg",
+        "id":  22
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:21 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.21 AM (1).jpeg",
+        "id":  23
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:21 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.21 AM (2).jpeg",
+        "id":  24
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:21 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.21 AM (3).jpeg",
+        "id":  25
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:21 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.21 AM.jpeg",
+        "id":  26
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:23 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.23 AM.jpeg",
+        "id":  27
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:24 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.24 AM (1).jpeg",
+        "id":  28
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:24 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.24 AM (2).jpeg",
+        "id":  29
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:24 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.24 AM.jpeg",
+        "id":  30
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:25 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.25 AM (1).jpeg",
+        "id":  31
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:25 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.25 AM (2).jpeg",
+        "id":  32
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:25 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.25 AM.jpeg",
+        "id":  33
+    },
+    {
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:26 AM",
+        "url":  "img/WhatsApp Image 2026-02-12 at 10.59.26 AM.jpeg",
+        "id":  34
     }
 ];
 
@@ -87,6 +243,24 @@ const videosData = [
         "tags":  "",
         "date":  "Feb 11, 2026",
         "title":  "Feb 11, 2026 - 5:21:40 PM",
+        "duration":  "0:00",
+        "thumbnail":  ""
+    },
+    {
+        "url":  "vid/WhatsApp Video 2026-02-12 at 10.46.01 AM.mp4",
+        "id":  5,
+        "tags":  "",
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:46:01 AM",
+        "duration":  "0:00",
+        "thumbnail":  ""
+    },
+    {
+        "url":  "vid/WhatsApp Video 2026-02-12 at 10.59.23 AM.mp4",
+        "id":  6,
+        "tags":  "",
+        "date":  "Feb 12, 2026",
+        "title":  "Feb 12, 2026 - 10:59:23 AM",
         "duration":  "0:00",
         "thumbnail":  ""
     }
